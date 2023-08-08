@@ -37,6 +37,6 @@ class ApiService
      */
     public function sendPayout(string $email, float $amount)
     {
-        //
+        Mail::to($email)->send(new PayoutSent($amount));
     }
 }

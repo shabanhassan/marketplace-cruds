@@ -86,5 +86,11 @@ class MerchantService
     public function payout(Affiliate $affiliate)
     {
         // TODO: Complete this method
+
+        $orders = Order::where('payout_status', Order::STATUS_UNPAID)->where('affiliate_id', $affiliate->id)->get();
+
+        foreach($orders as $order){
+            PayoutOrderJob::dispatch($order);
+        }
     }
 }
