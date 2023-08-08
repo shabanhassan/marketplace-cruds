@@ -27,7 +27,6 @@ class AffiliateService
      */
     public function register(Merchant $merchant, string $email, string $name, float $commissionRate, ?string $dCode = null): Affiliate
     {
-        // TODO: Complete this method
         $alreadyMerchant = Merchant::whereHas('User', function($query) use ($email) {
             $query->where('email', '=', $email);
         })->get()->first();

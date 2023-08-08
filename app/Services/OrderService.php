@@ -23,14 +23,11 @@ class OrderService
      */
     public function processOrder(array $data)
     {
-        // TODO: Complete this method
         $merchant   = Merchant::where('domain', '=', $data['merchant_domain'])->get()->first();
 
         $affiliate = Affiliate::whereHas('User', function($query) use ($data) {
             $query->whereLike('email', $data['customer_email']);
         })->get()->first();
-
-        // $affiliate  = Affiliate::where('discount_code', $data['discount_code'])->get()->first();
 
         if(!$affiliate){
             
@@ -50,24 +47,7 @@ class OrderService
                 'commission_rate'   => $merchant->default_commission_rate,
             ]);
             
-            // $affiliate  = User::find($user->id)->affiliate()->save(new Affiliate(array(
-            //     'merchant_id'       => $merchant->id,
-            //     'commission_rate'   => $merchant->default_commission_rate,
-            //     'discount_code'     => $data['discount_code'],
-            // )));
-
-            // $affiliate  = $this->affiliateService->register($merchant, $data['customer_email'], $data['customer_name'], $merchant->default_commission_rate, $data['discount_code']);
-        } 
-        
-        // $order = Order::updateOrCreate([
-        //     'external_order_id'=> $data['order_id']
-        // ],
-        // [
-        //     'subtotal'      => $data['subtotal_price'],
-        //     'commission_owed'   => $data['subtotal_price'] * $affiliate->commission_rate,
-        //     'merchant_id'   => $merchant->id,
-        //     'affiliate_id'  => $affiliate->id
-        // ]);
+        }
 
         $order = Order::where('external_order_id', $data['order_id'])->get()->first();
 

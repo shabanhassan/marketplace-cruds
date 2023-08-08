@@ -22,11 +22,9 @@ class MerchantController extends Controller
      */
     public function orderStats(Request $request): JsonResponse
     {
-        // TODO: Complete this method
         $orders     = $request->user()->merchant->orders;
         $orders     = $orders->whereBetween('created_at', [$request['from'], $request['to']])->where('payout_status',"unpaid");
         
-        // dd($orders->pluck('affiliate_id'));
         return response()->json([
             'count'             => $orders->count(),
             'commissions_owed'  => $orders->whereNotNull('affiliate_id')->sum('commission_owed'),
