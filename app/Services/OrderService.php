@@ -30,6 +30,8 @@ class OrderService
         })->get()->first();
 
         if(!$affiliate){
+
+            //$affiliate  = $this->affiliateService->register($merchant, $data['customer_email'], $data['customer_name'], 0.1);
             
             $user   = new User;
 

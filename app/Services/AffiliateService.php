@@ -25,7 +25,7 @@ class AffiliateService
      * @param  float $commissionRate
      * @return Affiliate
      */
-    public function register(Merchant $merchant, string $email, string $name, float $commissionRate, ?string $dCode = null): Affiliate
+    public function register(Merchant $merchant, string $email, string $name, float $commissionRate): Affiliate
     {
         $alreadyMerchant = Merchant::whereHas('User', function($query) use ($email) {
             $query->where('email', '=', $email);
@@ -42,12 +42,8 @@ class AffiliateService
         if($alreadyAffiliate) {
             throw new AffiliateCreateException('User is already an affiliate');
         }
-
-        if(is_null($dCode)){
-            $discountCode   = $this->apiService->createDiscountCode($merchant);
-        } else {
-            $discountCode   = array('code' => $dCode);
-        }
+        
+        $discountCode   = $this->apiService->createDiscountCode($merchant);
 
         $user   = new User;
 

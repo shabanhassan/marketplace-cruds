@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->foreignId('merchant_id');
             // Float or Double sometimes create too long numbers without rounding off, that can lead to potential risk of not true comparisons
-            $table->float('commission_rate', 10, 2);
+            $table->decimal('commission_rate', 10, 2);
             $table->string('discount_code');
             $table->timestamps();
         });
