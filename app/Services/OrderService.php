@@ -33,6 +33,7 @@ class OrderService
         // $affiliate  = Affiliate::where('discount_code', $data['discount_code'])->get()->first();
 
         if(!$affiliate){
+            
             $user   = new User;
 
             $user->name     = $data['customer_name'];
@@ -41,11 +42,19 @@ class OrderService
 
             $user->save();
 
-            $affiliate  = User::find($user->id)->affiliate()->save(new Affiliate(array(
+            $affiliate  = Affiliate::updateOrCreate([
+                'discount_code'     => $data['discount_code']
+            ],[
+                'user_id'           => $user->id,
                 'merchant_id'       => $merchant->id,
                 'commission_rate'   => $merchant->default_commission_rate,
-                'discount_code'     => $data['discount_code'],
-            )));
+            ]);
+            
+            // $affiliate  = User::find($user->id)->affiliate()->save(new Affiliate(array(
+            //     'merchant_id'       => $merchant->id,
+            //     'commission_rate'   => $merchant->default_commission_rate,
+            //     'discount_code'     => $data['discount_code'],
+            // )));
 
             // $affiliate  = $this->affiliateService->register($merchant, $data['customer_email'], $data['customer_name'], $merchant->default_commission_rate, $data['discount_code']);
         } 
