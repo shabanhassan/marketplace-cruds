@@ -21,6 +21,19 @@ class MerchantService
     public function register(array $data): Merchant
     {
         // TODO: Complete this method
+        $user   = new User;
+
+        $user->name     = $data['name'];
+        $user->email    = $data['email'];
+        $user->password = $data['api_key'];
+        $user->type     = User::TYPE_MERCHANT;
+
+        $user->save();
+
+        return User::find($user->id)->merchant()->save(new Merchant(array(
+            'domain'    => $data['domain'],
+            'display_name'  => $data['name'],
+        )));
     }
 
     /**
@@ -32,6 +45,17 @@ class MerchantService
     public function updateMerchant(User $user, array $data)
     {
         // TODO: Complete this method
+
+        $user->merchant()->update([
+            'domain'    => $data['domain'],
+            'display_name'  => $data['name'],
+        ]);
+        
+        $user->update([
+            'name'  => $data['name'],
+            'email' => $data['email'],
+            'password'  => $data['api_key'],
+        ]);
     }
 
     /**
@@ -44,6 +68,12 @@ class MerchantService
     public function findMerchantByEmail(string $email): ?Merchant
     {
         // TODO: Complete this method
+
+        $merchant   = Merchant::whereHas('User', function($query) use ($email) {
+            $query->where('email', '=', $email);
+        })->get()->first();
+
+        return $merchant;
     }
 
     /**
