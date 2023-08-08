@@ -44,9 +44,7 @@ class AffiliateService
         }
 
         if(is_null($dCode)){
-            $discountCode   = new ApiService;
-            
-            $discountCode   = $discountCode->createDiscountCode($merchant);
+            $discountCode   = $this->apiService->createDiscountCode($merchant);
         } else {
             $discountCode   = array('code' => $dCode);
         }
